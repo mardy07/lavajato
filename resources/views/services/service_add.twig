@@ -1,0 +1,306 @@
+{% extends 'layouts/base.twig' %}
+
+{% block css %}
+    <link href="public/css/plugins/iCheck/custom.css" rel="stylesheet">
+    <link href="public/css/plugins/datapicker/datepicker3.css" rel="stylesheet">
+    <link href="public/css/plugins/clockpicker/clockpicker.css" rel="stylesheet">
+    <link href="public/css/plugins/select2/select2.min.css" rel="stylesheet">
+    <link href="public/css/plugins/select2/select2-bootstrap.min.css" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+    <div class="row wrapper border-bottom white-bg page-heading">
+        <div class="col-lg-9">
+            <h2>Serviços</h2>
+            <ol class="breadcrumb">
+                <li>
+                    <a href="">Painel de controle</a>
+                </li>
+                <li>
+                    <a href="{{ path_for('services') }}">Serviços</a>
+                </li>
+                <li class="active">
+                    <strong>{{ breadcrumb }}</strong>
+                </li>
+            </ol>
+        </div>
+    </div>
+
+    <div class="wrapper wrapper-content animated fadeInRight">
+
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>{{ breadcrumb }} serviço</h5>
+                        <div class="ibox-tools">
+                            <a class="collapse-link">
+                                <i class="fa fa-chevron-up"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="ibox-content">
+
+                        <form id="form-add-service" action="{{ action }}" method="post">
+                            <div class="row">
+                                <div class="col-md-4 form-group">
+                                    <label>Serviço</label>
+                                    <select class="form-control" name="service">
+                                        <option value=""></option>
+                                        {% for category in category %}
+                                        <option value="{{ category.id }}" data-value="{{ category.value }}" {{ old.service == category.id ? 'selected' : service.category_id == category.id ? 'selected' : '' }}>{{ category.category }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <label>Status do serviço</label>
+                                        <select class="form-control" name="status">
+                                            <option value="1" {{ old.status == 1 ? 'selected' : service.status == 1 ? 'selected' : '' }}>Agendamento</option>
+                                            <option value="2" {{ old.status == 2 ? 'selected' : service.status == 2 ? 'selected' : '' }}>Em andamento</option>
+                                            <option value="3" {{ old.status == 3 ? 'selected' : service.status == 3 ? 'selected' : '' }}>Finalizado</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group {{ errors.placa ? 'has-error': '' }}">
+                                        <label>Placa</label>
+                                        <input type="text" name="placa" value="{{ old.placa ?? service.placa ?? '' }}" placeholder="Placa" class="form-control">
+                                        {% if errors.placa %}
+                                            {% for error in errors.placa %}
+                                                <span class="help-block">{{ error }}</span>
+                                            {% endfor %}
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group {{ errors.model ? 'has-error' : '' }}">
+                                        <label>Modelo</label>
+                                        <input type="text" name="model" value="{{ old.model ?? service.model ?? '' }}" placeholder="Modelo" class="form-control">
+                                        {% if errors.model %}
+                                            {% for error in errors.model %}
+                                                <span class="help-block">{{ error }}</span>
+                                            {% endfor %}
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12 form-group">
+                                    <label>Cor</label><br>
+                                    <div class="radio-inline i-checks">
+                                        <label> <input type="radio" value="branco" name="color" {{ old.color == 'branco' ? 'checked' : service.color == 'branco' ? 'checked' : '' }}> <i></i> Branco </label>
+                                    </div>
+                                    <div class=" radio-inline i-checks">
+                                        <label> <input type="radio" value="preto" name="color" {{ old.color == 'preto' ? 'checked' : service.color == 'preto' ? 'checked' : '' }}> <i></i> Preto </label>
+                                    </div>
+                                    <div class="radio-inline i-checks">
+                                        <label> <input type="radio" value="vermelho" name="color" {{ old.color == 'vermelho' ? 'checked' : service.color == 'vermelho' ? 'checked' : '' }}> <i></i> Vermelho </label>
+                                    </div>
+                                    <div class="radio-inline i-checks">
+                                        <label> <input type="radio" value="cinza" name="color" {{ old.color == 'cinza' ? 'checked' : service.color == 'cinza' ? 'checked' : '' }}> <i></i> Cinza </label>
+                                    </div>
+                                    <div class="radio-inline i-checks">
+                                        <label> <input type="radio" value="azul" name="color" {{ old.color == 'azul' ? 'checked' : service.color == 'azul' ? 'checked' : '' }}> <i></i> Azul </label>
+                                    </div>
+                                    <div class="radio-inline i-checks">
+                                        <label> <input type="radio" value="verde" name="color" {{ old.color == 'verde' ? 'checked' : service.color == 'verde' ? 'checked' : '' }}> <i></i> Verde </label>
+                                    </div>
+                                    <div class="radio-inline i-checks">
+                                        <label> <input type="radio" value="amarelo" name="color" {{ old.color == 'amarelo' ? 'checked' : service.color == 'amarelo' ? 'checked' : '' }}> <i></i> Amarelo </label>
+                                    </div>
+                                    <div class="radio-inline i-checks">
+                                        <label> <input type="radio" value="rosa" name="color" {{ old.color == 'rosa' ? 'checked' : service.color == 'rosa' ? 'checked' : '' }}> <i></i> Rosa </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-sm-4 {{ errors.customer_id ? 'has-error' : '' }}">
+                                    <label>Cliente</label>
+                                    <div class="input-group ">
+                                        <select class="form-control" name="customer_id">
+                                            <option value=""></option>
+                                            {% for customer in customers %}
+                                                <option value="{{ customer.id }}" {{ old.customer_id == customer.id ? 'selected' : service.customer_id == customer.id ? 'selected' : ''}}>{{ customer.customer }}</option>
+                                            {% endfor %}
+                                        </select>
+                                        <span class="input-group-btn">
+                                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-new-customer">
+                                                <i class="fa fa-user-plus"></i>
+                                            </button>
+                                        </span>
+                                    </div>
+                                    {% if errors.customer_id %}
+                                        {% for error in errors.customer_id %}
+                                            <span class="help-block">{{ error }}</span>
+                                        {% endfor %}
+                                    {% endif %}
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="form-group {{ errors.cellphone ? 'has-error' : '' }}">
+                                        <label>Celular</label>
+                                        <input type="text" name="cellphone" value="{{ old.cellphone ?? service.cellphone ?? '' }}" class="form-control">
+                                        {% if errors.cellphone %}
+                                            {% for error in errors.cellphone %}
+                                                <span class="help-block">{{ error }}</span>
+                                            {% endfor %}
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <div class="form-group {{ errors.value ? 'has-error' : '' }}">
+                                        <label>Valor</label>
+                                        <input type="text" name="value" value="{{ old.value ?? service.value ?? '' }}" class="form-control">
+                                        {% if errors.value %}
+                                            {% for error in errors.value %}
+                                                <span class="help-block">{{ error }}</span>
+                                            {% endfor %}
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <label>Pagamento</label>
+                                        <label class="checkbox i-checks"> <input type="checkbox" name="payment" value="1" {{ old.payment == 1 ? 'checked' : service.payment_status == 1 ? 'checked' : '' }}> realizado </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-4 form-group {{ errors.date ? 'has-error' : '' }}">
+                                    <label>Data</label>
+                                    <div class="input-group date">
+                                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                        <input type="text" name="date" class="form-control" value="{{ old.date ?? service.date ? service.date | date('d/m/Y')  : '' }}">
+                                    </div>
+                                    {% if errors.date %}
+                                        {% for error in errors.date %}
+                                            <span class="help-block">{{ error }}</span>
+                                        {% endfor %}
+                                    {% endif %}
+                                </div>
+                                <div class="col-sm-2">
+                                    <label>Hora Início</label>
+                                    <div class="input-group clockpicker" data-autoclose="true">
+                                        <input type="text" class="form-control" name="start_time" value="{{ old.start_time ?? service.start_time ?? '' }}" >
+                                        <span class="input-group-addon">
+                                            <span class="fa fa-clock-o"></span>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="col-sm-2 form-group">
+                                    <label>Hora Termino</label>
+                                    <div class="input-group clockpicker" data-autoclose="true">
+                                        <input type="text" class="form-control" name="end_time" value="{{ old.end_time ?? service.end_time ?? '' }}" >
+                                        <span class="input-group-addon">
+                                            <span class="fa fa-clock-o"></span>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-sm-12 form-group {{ errors.comments ? 'has-error' : '' }}">
+                                    <label>Observações</label>
+                                    <textarea name="comments" class="form-control">{{ old.comments ?? service.comments ?? '' }}</textarea>
+                                    {% if errors.comments %}
+                                        {% for error in errors.comments %}
+                                            <span class="help-block">{{ error }}</span>
+                                        {% endfor %}
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            <div class="hr-line-dashed"></div>
+
+                            <div class="row">
+                                <div class="form-group col-sm-4">
+                                    <a href="{{ path_for('services') }}" class="btn btn-white btn-sm" type="button">Cancelar</a>
+                                    <button class="btn btn-primary btn-sm" type="submit">Salvar</button>
+                                </div>
+                            </div>
+                            <input type="hidden" name="id" value="{{ service.id }}">
+                            {{ csrf.field | raw }}
+                        </form>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+
+    </div>
+    {%  include('customers/modal_new_customer.twig') %}
+
+{% endblock %}
+
+{% block js %}
+
+    <script src="public/js/plugins/iCheck/icheck.min.js"></script>
+    <script src="public/js/plugins/datapicker/bootstrap-datepicker.js"></script>
+    <script src="public/js/plugins/clockpicker/clockpicker.js"></script>
+    <script src="public/js/plugins/select2/select2.full.min.js"></script>
+
+
+    <script>
+        $(document).ready(function () {
+            $('.i-checks').iCheck({
+                checkboxClass: 'icheckbox_square-green',
+                radioClass: 'iradio_square-green',
+            });
+            $('.date').datepicker({
+                autoclose: true,
+                todayHighlight: true,
+                format: 'dd/mm/yyyy'
+            });
+
+            $('.clockpicker').clockpicker();
+
+            $("#modal-new-customer").on('hidden.bs.modal', function () {
+                $("#modal-new-customer input[type=text]").val(''), $("#modal-new-customer input[type=number]").val('');
+            });
+
+            $("#submit-customer").click(function () {
+                let form = $("#form-customer");
+                $.ajax({
+                    url: "{{ path_for('customers') ~ 'create' }}",
+                    type: "POST",
+                    data: form.serialize(),
+                    success: function (response) {
+                        console.log(response);
+                        if(response.errors) {
+                            alert( (response.errors) );
+                        }
+
+                        if(response.customer) {
+                            $("#form-add-service select[name=customer_id]").append('<option value="'+ response.id +'" selected>'+ response.customer +'</option>');
+                            $("#form-add-service select[name=customer_id]").select2('val', response.id);
+                            $("#form-add-service input[name=cellphone]").val(response.cellphone);
+                            $("#modal-new-customer").modal('hide');
+                        }
+
+                    }
+                });
+
+            });
+
+            $("select[name=service]").on('change', function () {
+                let price = $("select[name=service] option:selected" ).data('value');
+                $("input[name=value]").val(price);
+            });
+
+            $("#form-add-service select[name=customer_id]").select2({
+                theme: "bootstrap"
+            });
+
+        });
+    </script>
+
+{% endblock %}

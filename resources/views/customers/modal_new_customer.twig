@@ -1,0 +1,116 @@
+<div class="modal fade" id="modal-new-customer" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Cadastrar Cliente</h4>
+            </div>
+            <div class="modal-body">
+
+                <form id="form-customer" autocomplete="off">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="control-label">Cliente<span class="text-danger">*</span></label>
+                            <input class="form-control" type="text" name="customer" required>
+                        </div>
+                    </div>
+                    <div class="col-md-6 form-group">
+                        <label>Data Nascimento</label>
+                        <div class="input-group date">
+                            <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                            <input type="text" name="date_birth" class="form-control" value="">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 form-group">
+                        <label>Sexo</label><br>
+                        <div class="radio-inline i-checks">
+                            <label> <input type="radio" value="male" name="sex"> <i></i> Masculino </label>
+                        </div>
+                        <div class=" radio-inline i-checks">
+                            <label> <input type="radio" value="female" name="sex"> <i></i> Feminino </label>
+                        </div>
+                    </div>
+                    <div class="col-md-6 form-group">
+                        <label>Email</label>
+                        <input type="text" name="email" value="" class="form-control">
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 form-group">
+                        <label>Celular</label>
+                        <input type="text" name="cellphone" value="" class="form-control">
+                    </div>
+                    <div class="col-md-6 form-group">
+                        <label>Telefone</label>
+                        <input type="text" name="phone" value="" class="form-control">
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="form-group ">
+                            <label>CEP</label>
+                            <input type="text" name="zipcode" value="" class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group ">
+                            <label>Rua</label>
+                            <input type="text" name="address" value="" class="form-control">
+
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label>Numero</label>
+                            <input type="number" name="number" value="" class="form-control">
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Bairro</label>
+                            <input type="text" name="neighborhood" value="" class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Complemento</label>
+                            <input type="text" name="complement" value="" class="form-control">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Cidade</label>
+                            <input type="text" name="city" value="" class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Estado</label>
+                            <input type="text" name="state" value="" class="form-control">
+                        </div>
+                    </div>
+                </div>
+                    <input type="hidden" name="return" value="json">
+                    {{ csrf.field | raw }}
+                </form>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                <button id="submit-customer" type="button" class="btn btn-primary">Salvar</button>
+            </div>
+        </div>
+    </div>
+</div>

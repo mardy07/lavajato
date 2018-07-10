@@ -1,0 +1,26 @@
+{% if flash.getMessage('error') %}
+    <script>
+        var message = {{ flash.getMessage('error') | json_encode | raw }};
+        setTimeout(function() {
+            toastr.error('Error', message);
+        }, 1e3);
+    </script>
+{% endif %}
+
+{% if flash.getMessage('success') %}
+    <script>
+        var message = {{ flash.getMessage('success') | json_encode | raw }};
+        setTimeout(function() {
+            toastr.success('Sucesso', message);
+        }, 1e3);
+    </script>
+{% endif %}
+
+{% if flash.getMessage('info') %}
+    <script>
+        var message = {{ flash.getMessage('info') | json_encode | raw }};
+        setTimeout(function() {
+            toastr.info('Informação', message);
+        }, 1e3);
+    </script>
+{% endif %}

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="pt-br" >
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <base href="{{ constant('BASE_URL') }}">
+    <link rel="stylesheet" href="public/css/login.css?">
+    <link rel="stylesheet" href="public/css/plugins/toastr/toastr.min.css">
+</head>
+<body>
+
+<div accesskey="personagem"></div>
+
+<div class="wrapper fadeInDown">
+    <div id="formContent">
+        <!-- Tabs Titles -->
+        <h2 class="active"> Sou cliente </h2>
+        <h2 class="inactive underlineHover">Suporte</h2>
+
+        <!-- Icon -->
+        <div class="fadeIn first">
+            <img src="public/img/desenhando.svg" id="icon" alt="User Icon" />
+        </div>
+
+        <!-- Login Form -->
+        <form id="formLogin" action="{{ path_for('auth.logar') }}" method="post" role="form" autocomplete="off">
+            <input type="text" id="login" class="fadeIn second" value="{{ old.email }}" name="email" placeholder="Email">
+            {% if errors.email %}
+                {% for error in errors.email %}
+                    <p class="help-block">{{ error }}</p>
+                {% endfor %}
+            {% endif %}
+            <input type="password" id="password" class="fadeIn third" name="password" placeholder="Senha">
+            {% if errors.password %}
+                {% for error in errors.password %}
+                    <p class="help-block">{{ error }}</p>
+                {% endfor %}
+            {% endif %}
+            <input type="submit" class="fadeIn fourth" value="entrar">
+            {{ csrf.field | raw }}
+        </form>
+        <!-- CheckenBox-->
+        <form action="classe1">
+            <input type="checkbox" name="remember" value="1">Ficar Conectado
+            {{ csrf.field | raw }}
+        </form>
+
+        <!-- Remind Passowrd -->
+        <div id="formFooter">
+            <a class="underlineHover" href="">Esqueceu sua senha?</a>
+        </div>
+    </div>
+</div>
+<script src="public/js/jquery-3.1.1.min.js"></script>
+<script src="public/js/plugins/toastr/toastr.min.js"></script>
+{% include('layouts/flash.twig') %}
+
+</body>
+</html>

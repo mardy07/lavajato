@@ -1,0 +1,119 @@
+{% extends 'layouts/base.twig' %}
+
+{% block css %}
+    <link href="public/css/plugins/iCheck/custom.css" rel="stylesheet">
+    <link href="public/css/plugins/datapicker/datepicker3.css" rel="stylesheet">
+    <link href="public/css/plugins/colorpicker/bootstrap-colorpicker.min.css" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+    <div class="row wrapper border-bottom white-bg page-heading">
+        <div class="col-lg-9">
+            <h2>Categoria de Serviços</h2>
+            <ol class="breadcrumb">
+                <li>
+                    <a href="">Painel de controle</a>
+                </li>
+                <li>
+                    <a href="{{ path_for('services') }}">Serviços</a>
+                </li>
+                <li>
+                    <a href="{{ path_for('services.categories') }}"> Categorias</a>
+                </li>
+                <li class="active">
+                    <strong>{{ breadcrumb }}</strong>
+                </li>
+            </ol>
+        </div>
+    </div>
+
+    <div class="wrapper wrapper-content animated fadeInRight">
+
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>{{ breadcrumb }} categoria</h5>
+                        <div class="ibox-tools">
+                            <a class="collapse-link">
+                                <i class="fa fa-chevron-up"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="ibox-content">
+
+                        <form action="{{ action }}" method="post">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group {{ errors.category ? 'has-error' : '' }}">
+                                        <label>Categoria</label>
+                                        <input type="text" name="category" value="{{ category.category }}" placeholder="Categoria" class="form-control" required>
+                                        {% if errors.category %}
+                                            {% for error in errors.category %}
+                                                <span class="help-block">{{ error }}</span>
+                                            {% endfor %}
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group {{ errors.value ? 'has-error' : '' }}">
+                                        <label>Preço padrão serviço</label>
+                                        <input type="text" name="value" value="{{ category.value }}" placeholder="valor" class="form-control" required>
+                                        {% if errors.value %}
+                                            {% for error in errors.value %}
+                                                <span class="help-block">{{ error }}</span>
+                                            {% endfor %}
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12 form-group">
+                                    <label>Status</label><br>
+                                    <div class="radio-inline i-checks">
+                                        <label> <input type="radio" value="1" name="active" {{ category.active == 1 ? 'checked' : '' }} checked required> <i></i> Ativo </label>
+                                    </div>
+                                    <div class=" radio-inline i-checks">
+                                        <label> <input type="radio" value="0" name="active" {{ category.active == 0 and category.active is defined ? 'checked' : '' }} required> <i></i> Desativado </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="hr-line-dashed"></div>
+
+                            <div class="row">
+                                <div class="form-group col-sm-4">
+                                    <a href="{{ path_for('services.categories') }}" class="btn btn-white btn-sm" type="button">Cancelar</a>
+                                    <button class="btn btn-primary btn-sm" type="submit">Salvar</button>
+                                </div>
+                            </div>
+                            <input type="hidden" name="id" value="{{ category.id ?? '' }}">
+                            {{ csrf.field | raw }}
+                        </form>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+
+    </div>
+{% endblock %}
+
+{% block js %}
+
+    <script src="public/js/plugins/iCheck/icheck.min.js"></script>
+    <script src="public/js/plugins/datapicker/bootstrap-datepicker.js"></script>
+    <script src="public/js/plugins/colorpicker/bootstrap-colorpicker.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('.i-checks').iCheck({
+                checkboxClass: 'icheckbox_square-green',
+                radioClass: 'iradio_square-green',
+            });
+
+        });
+    </script>
+
+{% endblock %}

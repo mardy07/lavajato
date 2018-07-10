@@ -1,0 +1,267 @@
+{% extends 'layouts/base.twig' %}
+
+{% block css %}
+    <link href="public/css/plugins/dataTables/datatables.min.css" rel="stylesheet">
+    <link href="public/css/plugins/datapicker/datepicker3.css" rel="stylesheet">
+    <link href="public/css/plugins/daterangepicker/daterangepicker-bs3.css" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+    <div class="row wrapper border-bottom white-bg page-heading">
+        <div class="col-lg-9">
+            <h2>Serviços</h2>
+            <ol class="breadcrumb">
+                <li>
+                    <a href="">Painel de controle</a>
+                </li>
+                <li class="active">
+                    <strong>Serviços</strong>
+                </li>
+            </ol>
+        </div>
+    </div>
+
+    <div class="wrapper wrapper-content animated fadeInRight">
+
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>Lista de serviços</h5>
+                        <div class="ibox-tools">
+                            <a href="{{ path_for('services.form') }}" class="btn btn-primary btn-xs">
+                                Add Novo
+                            </a>
+                            <a class="collapse-link">
+                                <i class="fa fa-chevron-up"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="ibox-content">
+                        <div class="row">
+                            <div class="col-md-2 col-md-offset-3">
+                                <div class="form-group">
+                                    <label class="font-normal">Selecione o Período</label>
+                                    <select id="period-filter" class="input-sm form-control">
+                                        <option value=""></option>
+                                        <option value="today">Hoje</option>
+                                        <option value="week">Esta semana</option>
+                                        <option value="month">Este Mês</option>
+                                        <option value="year">Este Ano</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group" id="group-filter">
+                                    <label class="font-normal">Filtrar por Data</label>
+                                    <div class="input-daterange input-group" id="datepicker">
+                                        <input id="dt_start" type="text" class="input-sm form-control" name="dt_start" value="{{ 'now' | date('01-m-Y') }}" />
+                                        <span class="input-group-addon">até</span>
+                                        <input id="dt_end" type="text" class="input-sm form-control" name="dt_end" value="{{ 'now'| date_modify('+1 month') | date('01-m-Y') }}" />
+                                        <a id="filter-date" class="input-group-addon">Pesquisar</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="table-responsive">
+                            <table id="table-services" class="table table-striped table-bordered table-hover dataTables-example" >
+                                <thead>
+                                <tr>
+                                    <th>Id</th>
+                                    <th>Data</th>
+                                    <th>Veículo</th>
+                                    <th>Serviço</th>
+                                    <th>Valor</th>
+                                    <th>Pagamento</th>
+                                    <th>Status</th>
+                                    <th>Ações</th>
+                                </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+    {% include('services/modal_service.twig') %}
+{% endblock %}
+
+{% block js %}
+    <script src="public/js/plugins/dataTables/datatables.min.js"></script>
+    <script src="https://cdn.datatables.net/plug-ins/1.10.19/sorting/datetime-moment.js"></script>
+    <script src="public/js/plugins/datapicker/bootstrap-datepicker.js"></script>
+    <script src="public/js/plugins/daterangepicker/daterangepicker.js"></script>
+    <script>
+        $(document).ready(function () {
+            $.fn.dataTable.moment('DD/MM/YYYY');
+            var table = $("#table-services").dataTable({
+                responsive: true,
+                "orderFixed": [1,'desc'],
+                "iDisplayLength": 50,
+                "ajax": {
+                    "url": "{{ path_for('services') ~ 'read' }}",
+                    "type": "GET",
+                    "dataSrc" : "services"
+                },
+                "columns": [
+                    { "data": "id", "sortable": false, "orderable": false },
+                    {
+                        "data": null,
+                        "render": function (data, type, full, meta) {
+                            return (full.date) ? moment(full.date).format('DD/MM/YYYY') : '';
+                        }
+                    },
+                    {
+                        "data": null,
+                        "render": function (data, type, full, meta) {
+                            return full.placa +' / '+ full.model;
+                        }
+                    },
+                    { "data": "category" },
+                    { "data": "value" },
+                    {
+                        "data": null,
+                        "render": function (data, type, full, meta) {
+                            return full.payment_status ? '<small class="label label-primary"><i class="fa fa-check"></i> recebido</small>' : '<small class="label label-danger"><i class="fa fa-remove"></i> pendente</small>';
+                        }
+                    },
+                    {
+                        "data": "status",
+                        "render": function (data, type, full, meta) {
+                            var html_status = '';
+                            switch (full.status){
+                                case 1: html_status = '<small class="label label-warning"><i class="fa fa-calendar"></i> agendado</small>';
+                                break;
+                                case 2: html_status = '<small class="label label-primary"><i class="fa fa-clock-o"></i> em execução</small>';
+                                break;
+                                case 3: html_status = '<small class="label label-success"><i class="fa fa-check"></i> concluido</small>';
+                                break;
+                                default: html_status = '<small class="label label-danger"><i class="fa fa-remove"></i> cancelado</small>';
+                            }
+                            return html_status;
+                        }
+                    },
+                    {
+                        "data": null,
+                        "sortable": false,
+                        "orderable": false,
+                        "render": function (data, type, full, meta) {
+                            let id = full.id;
+                            var acoes = '' +
+                                '<a href="#" data-id="'+ id +'" data-toggle="modal" data-target="#modal-service" rel="tooltip" title="visualizar"><i class="fa fa-file"></i></a>\n' +
+                                '<a href="{{ path_for('services') ~ 'edit/' }}'+ id +'" data-toggle="tooltip" title="editar"><i class="fa fa-edit"></i></a>\n' +
+                                '<a class="delete" data-id="'+ id +'" data-toggle="tooltip" title="deletar"><i class="fa fa-trash"></i></a>';
+                            return acoes;
+                        }
+                    }
+                ],
+                "language": {
+                    "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Portuguese-Brasil.json"
+                },
+                "drawCallback": function (settings) {
+                    $('[data-toggle="tooltip"]')[0] && $('[data-toggle="tooltip"]').tooltip();
+                    $('[rel="tooltip"]').tooltip();
+                    $(".delete").on("click", function () {
+                        let id = $(this).data('id');
+                        if (confirm("Deseja realmente deletar esse registro?")) {
+                            $.ajax({
+                                type: "GET",
+                                data: { json : true },
+                                url: "{{ path_for('services') ~ 'delete/' }}" + id,
+                                success: function (data) {
+                                    table.api().ajax.reload(null, false);
+                                    console.log(data);
+                                }
+                            });
+                        }
+                    });
+                }
+
+            });
+
+            $("#filter-date").click(function () {
+                let url = "{{ path_for('services') ~ 'read' }}?dt_start="+ $("#dt_start").val() +"&dt_end=" + $("#dt_end").val();
+                table.api().ajax.url(url).load();
+            });
+            $("#period-filter").on('change', function () {
+                switch ($(this).val()) {
+                    case 'today':
+                        $("#dt_start").val(moment().format('DD-MM-YYYY'));
+                        $("#dt_end").val(moment().format('DD-MM-YYYY'));
+                        $("#filter-date").click();
+                    break;
+                    case 'week':
+                        $("#dt_start").val(moment().weekday(0).format('DD-MM-YYYY'));
+                        $("#dt_end").val(moment().weekday(6).format('DD-MM-YYYY'));
+                        $("#filter-date").click();
+                    break;
+                    case 'month':
+                        $("#dt_start").val(moment().format('01-MM-YYYY'));
+                        $("#dt_end").val(moment().endOf("month").format('DD-MM-YYYY'));
+                        $("#filter-date").click();
+                    break;
+                    case 'year':
+                        $("#dt_start").val(moment().format('01-01-YYYY'));
+                        $("#dt_end").val(moment().endOf("year").format('DD-MM-YYYY'));
+                        $("#filter-date").click();
+                    break;
+                }
+            });
+
+            $("#group-filter .input-daterange").datepicker({
+                keyboardNavigation: false,
+                forceParse: false,
+                autoclose: true,
+                format: 'dd-mm-yyyy',
+                language: 'pt-BR'
+            });
+
+            $("#modal-service").on('show.bs.modal', function (e) {
+                let button = $(e.relatedTarget);
+                let id = button.data('id');
+                $.ajax({
+                    url: "{{ path_for('services') ~ 'order/' }}" + id,
+                    success: function (response) {
+                        console.log(response);
+                        let service = response.service;
+                        let html_status = '';
+                        let html_pay = '';
+                        $("#m-servico").text(service.category);
+                        $("#m-id").text(service.id);
+                        $("#m-model").text(service.model);
+                        $("#m-placa").text(service.placa);
+                        $("#m-color").text(service.color);
+                        $("#m-date").text(moment(service.date).format('DD/MM/YYYY'));
+                        $("#m-time").text(service.start_time + ' as ' + service.end_time);
+                        $("#m-customer").text(service.customer);
+                        $("#m-cellphone").text(service.cellphone);
+                        if(service.payment_status == 1) {
+                            html_pay = '<span class="label label-primary"><i class="fa fa-check"></i> Recebido</span>';
+                        } else {
+                            html_pay = '<span class="label label-warning"><i class="fa fa-check"></i> Pendente</span>';
+                        }
+                        switch (service.status) {
+                            case 1: html_status = '<small class="label label-warning"><i class="fa fa-calendar"></i> agendado</small>';
+                                break;
+                            case 2: html_status = '<small class="label label-primary"><i class="fa fa-clock-o"></i> em execução</small>';
+                                break;
+                            case 3: html_status = '<small class="label label-success"><i class="fa fa-check"></i> concluido</small>';
+                                break;
+                            default: html_status = '<small class="label label-danger"><i class="fa fa-remove"></i> cancelado</small>';
+                        }
+                        $("#m-status").html(html_status);
+                        $("#m-payment").html(html_pay);
+                    }
+                });
+            });
+
+        });
+    </script>
+{% endblock %}
