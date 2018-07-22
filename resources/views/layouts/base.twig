@@ -48,21 +48,18 @@
                     <a href="#"><i class="fa fa-bar-chart-o"></i> <span class="nav-label">Serviços</span><span class="fa arrow"></span></a>
                     <ul class="nav nav-second-level collapse">
                         <li><a href="{{ path_for('services') }}">Serviços</a></li>
-                        <li><a href="{{ path_for('services.form') }}">Add Serviço</a></li>
-                    </ul>
-                </li>
-                <li>
-                    <a href="#"><i class="fa fa-list-alt"></i> <span class="nav-label">Categorias</span><span class="fa arrow"></span></a>
-                    <ul class="nav nav-second-level collapse">
-                        <li><a href="{{ path_for('services') ~ 'categories' }}">Categorias Serviço</a></li>
-                        <li><a href="{{ path_for('services') ~ 'categories/add' }}">Add Categoria Serviço</a></li>
+                        <li><a href="{{ path_for('services.form') }}">Novo Serviço</a></li>
+                        <li><a href="{{ path_for('services.categories') }}">Categorias</a></li>
+                        <li><a href="{{ path_for('services') ~ 'categories/add' }}">Nova Categoria</a></li>
                     </ul>
                 </li>
                 <li>
                     <a href="#"><i class="fa fa-area-chart"></i> <span class="nav-label">Despesas</span><span class="fa arrow"></span></a>
                     <ul class="nav nav-second-level collapse">
-                        <li><a href="">Todas</a></li>
-                        <li><a href="">Add Despesas</a></li>
+                        <li><a href="{{ path_for('expenses') }}">Despesas</a></li>
+                        <li><a href="{{ path_for('expenses.form') }}">Nova Despesa</a></li>
+                        <li><a href="{{ path_for('expenses.categories') }}">Categorias</a></li>
+                        <li><a href="{{ path_for('expenses') ~ 'categories/add' }}">Nova Categoria</a></li>
                     </ul>
                 </li>
                 <li>

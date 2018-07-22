@@ -103,7 +103,7 @@
             $.fn.dataTable.moment('DD/MM/YYYY');
             var table = $("#table-services").dataTable({
                 responsive: true,
-                "orderFixed": [1,'desc'],
+                "order": [1,'desc'],
                 "iDisplayLength": 50,
                 "ajax": {
                     "url": "{{ path_for('services') ~ 'read' }}",

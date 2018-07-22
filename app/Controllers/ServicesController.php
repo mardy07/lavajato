@@ -176,9 +176,9 @@ class ServicesController extends Controller
         $services = new Services();
         $service = $services->where('id', $id);
         if($service->delete()) {
-            $this->flash->addMessage('success', 'Cliente excluido com sucesso');
+            $this->flash->addMessage('success', 'Serviço excluido com sucesso');
         } else {
-            $this->flash->addMessage('error', 'Erro ao excluir cliente');
+            $this->flash->addMessage('error', 'Erro ao excluir serviço');
         }
 
         return $response->withHeader('Content-Type', 'application/json')->withStatus(200)
@@ -209,8 +209,11 @@ class ServicesController extends Controller
      */
     private function dataFormat($data)
     {
-        $dt = explode('/', $data);
-        return date('Y-m-d H:m:s', strtotime($dt[2] . '-' . $dt[1] . '-' . $dt[0] . ' 00:00:00'));
+        if($data) {
+            $dt = explode('/', $data);
+            return date('Y-m-d H:m:s', strtotime($dt[2] . '-' . $dt[1] . '-' . $dt[0] . ' 00:00:00'));
+        }
+        return NULL;
     }
 
 }

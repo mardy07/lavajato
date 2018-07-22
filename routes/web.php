@@ -32,6 +32,24 @@ $app->group('/services', function (){
     $this->get('/categories/delete/{id:\d+}', '\App\Controllers\ServicesCatController:delete');
 })->add(\App\Middleware\AuthMiddleware::class);
 
+$app->group('/expenses', function () {
+    $this->get('[/]', 'App\Controllers\ExpensesController:index')->setName('expenses');
+    $this->get('/add', 'App\Controllers\ExpensesController:formExpenses')->setName('expenses.form');
+    $this->get('/edit/{id:\d+}', 'App\Controllers\ExpensesController:formExpenses');
+    $this->post('/create', 'App\Controllers\ExpensesController:create');
+    $this->get('/read', 'App\Controllers\ExpensesController:read');
+    $this->post('/update', 'App\Controllers\ExpensesController:update');
+    $this->get('/delete/{id:\d+}', 'App\Controllers\ExpensesController:delete');
+    $this->get('/expense/{id:\d+}', 'App\Controllers\ExpensesController:getExpense');
+
+    $this->get('/categories', '\App\Controllers\ExpensesCatController:index')->setName('expenses.categories');
+    $this->get('/categories/add', '\App\Controllers\ExpensesCatController:formCategory');
+    $this->get('/categories/edit/{id:\d+}', '\App\Controllers\ExpensesCatController:formCategory');
+    $this->post('/categories/create', '\App\Controllers\ExpensesCatController:create');
+    $this->post('/categories/update', '\App\Controllers\ExpensesCatController:update');
+    $this->get('/categories/delete/{id:\d+}', '\App\Controllers\ExpensesCatController:delete');
+})->add(\App\Middleware\AuthMiddleware::class);
+
 $app->group('/customers', function (){
     $this->get('[/]', '\App\Controllers\CustomersController:index')->setName('customers');
     $this->get('/add', '\App\Controllers\CustomersController:formCustomer');

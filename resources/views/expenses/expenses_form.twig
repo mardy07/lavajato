@@ -1,0 +1,165 @@
+{% extends 'layouts/base.twig' %}
+
+{% block css %}
+    <link href="public/css/plugins/iCheck/custom.css" rel="stylesheet">
+    <link href="public/css/plugins/datapicker/datepicker3.css" rel="stylesheet">
+    <link href="public/css/plugins/select2/select2.min.css" rel="stylesheet">
+    <link href="public/css/plugins/select2/select2-bootstrap.min.css" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+    <div class="row wrapper border-bottom white-bg page-heading">
+        <div class="col-lg-9">
+            <h2>Despesas</h2>
+            <ol class="breadcrumb">
+                <li>
+                    <a href="">Painel de controle</a>
+                </li>
+                <li>
+                    <a href="{{ path_for('expenses') }}">Despesas</a>
+                </li>
+                <li class="active">
+                    <strong>{{ breadcrumb }}</strong>
+                </li>
+            </ol>
+        </div>
+    </div>
+
+    <div class="wrapper wrapper-content animated fadeInRight">
+
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>{{ breadcrumb }} despesas</h5>
+                        <div class="ibox-tools">
+                            <a class="collapse-link">
+                                <i class="fa fa-chevron-up"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="ibox-content">
+
+                        <form action="{{ action }}" method="post" autocomplete="off">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group {{ errors.expense ? 'has-error' : '' }}">
+                                        <label>Categoria</label>
+                                        <select class="form-control" name="category_id" required>
+                                            <option value=""></option>
+                                            {% for category in category %}
+                                                <option value="{{ category.id }}" {{ old.category_id == category.id ? 'selected' : expense.category_id == category.id ? 'selected' : '' }}>{{ category.category }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 form-group {{ errors.expiration_date ? 'has-error' : '' }}">
+                                    <label>Vencimento</label>
+                                    <div class="input-group date">
+                                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                        <input type="text" name="expiration_date" class="form-control" value="{{ old.expiration_date ?? expense.expiration_date ? expense.expiration_date | date('d/m/Y')  : '' }}" required>
+                                    </div>
+                                    {% if errors.expiration_date %}
+                                        {% for error in errors.expiration_date %}
+                                            <span class="help-block">{{ error }}</span>
+                                        {% endfor %}
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group {{ errors.expense ? 'has-error' : '' }}">
+                                        <label>Descrição da Despesa</label>
+                                        <input type="text" name="expense" value="{{ expense.expense }}" placeholder="despesa" class="form-control" required>
+                                        {% if errors.expense %}
+                                            {% for error in errors.expense %}
+                                                <span class="help-block">{{ error }}</span>
+                                            {% endfor %}
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group {{ errors.value ? 'has-error' : '' }}">
+                                        <label>Valor da despesa</label>
+                                        <input type="text" name="value" value="{{ expense.value }}" placeholder="valor" class="form-control" required>
+                                        {% if errors.value %}
+                                            {% for error in errors.value %}
+                                                <span class="help-block">{{ error }}</span>
+                                            {% endfor %}
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4 form-group">
+                                    <label>Status pagamento</label><br>
+                                    <div class="radio-inline i-checks">
+                                        <label> <input id="radio-payment-y" type="radio" value="1" name="payment_status" {{ expense.payment_status == 1 ? 'checked' : '' }} required> <i></i> Pago </label>
+                                    </div>
+                                    <div class=" radio-inline i-checks">
+                                        <label> <input id="radio-payment-n" type="radio" value="0" name="payment_status" {{ expense.payment_status == 0 and expense.payment_status is defined ? 'checked' : '' }} required> <i></i> Pendente </label>
+                                    </div>
+                                </div>
+                                <div id="input-payment-date" class="col-md-4 form-group {{ errors.payment_date ? 'has-error' : '' }}">
+                                    <label>Pagamento realizado em?</label>
+                                    <div class="input-group date">
+                                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                        <input type="text" name="payment_date" class="form-control" value="{{ old.payment_date ?? expense.payment_date ? expense.payment_date | date('d/m/Y')  : '' }}">
+                                    </div>
+                                    {% if errors.payment_date %}
+                                        {% for error in errors.payment_date %}
+                                            <span class="help-block">{{ error }}</span>
+                                        {% endfor %}
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            <div class="hr-line-dashed"></div>
+
+                            <div class="row">
+                                <div class="form-group col-sm-4">
+                                    <a href="{{ path_for('expenses') }}" class="btn btn-white btn-sm" type="button">Cancelar</a>
+                                    <button class="btn btn-primary btn-sm" type="submit">Salvar</button>
+                                </div>
+                            </div>
+                            <input type="hidden" name="id" value="{{ expense.id ?? '' }}">
+                            {{ csrf.field | raw }}
+                        </form>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+{% endblock %}
+
+{% block js %}
+    <script src="public/js/plugins/iCheck/icheck.min.js"></script>
+    <script src="public/js/plugins/datapicker/bootstrap-datepicker.js"></script>
+    <script src="public/js/plugins/select2/select2.full.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('.i-checks').iCheck({
+                checkboxClass: 'icheckbox_square-green',
+                radioClass: 'iradio_square-green',
+            });
+            $('.date').datepicker({
+                autoclose: true,
+                todayHighlight: true,
+                format: 'dd/mm/yyyy'
+            });
+
+            $("input[name=id]").val() <= 0 ? $("#input-payment-date").hide() : false,
+            $("#radio-payment-y").on('ifChecked', function () {
+                $("#input-payment-date").show();
+            }),
+            $("#radio-payment-y").on('ifUnchecked', function () {
+                $("#input-payment-date").hide();
+                $("input[name=payment_date]").val('');
+            });
+
+        });
+    </script>
+{% endblock %}

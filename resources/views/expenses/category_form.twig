@@ -9,16 +9,16 @@
 {% block content %}
     <div class="row wrapper border-bottom white-bg page-heading">
         <div class="col-lg-9">
-            <h2>Categoria de Serviços</h2>
+            <h2>Categoria de Despesas</h2>
             <ol class="breadcrumb">
                 <li>
                     <a href="">Painel de controle</a>
                 </li>
                 <li>
-                    <a href="{{ path_for('services') }}">Serviços</a>
+                    <a href="{{ path_for('expenses') }}">Despesas</a>
                 </li>
                 <li>
-                    <a href="{{ path_for('services.categories') }}"> Categorias</a>
+                    <a href="{{ path_for('expenses.categories') }}"> Categorias</a>
                 </li>
                 <li class="active">
                     <strong>{{ breadcrumb }}</strong>
@@ -55,17 +55,6 @@
                                         {% endif %}
                                     </div>
                                 </div>
-                                <div class="col-md-4">
-                                    <div class="form-group {{ errors.value ? 'has-error' : '' }}">
-                                        <label>Preço padrão serviço</label>
-                                        <input type="text" name="value" value="{{ category.value }}" placeholder="valor" class="form-control" required>
-                                        {% if errors.value %}
-                                            {% for error in errors.value %}
-                                                <span class="help-block">{{ error }}</span>
-                                            {% endfor %}
-                                        {% endif %}
-                                    </div>
-                                </div>
                             </div>
                             <div class="row">
                                 <div class="col-md-12 form-group">
@@ -83,7 +72,7 @@
 
                             <div class="row">
                                 <div class="form-group col-sm-4">
-                                    <a href="{{ path_for('services.categories') }}" class="btn btn-white btn-sm" type="button">Cancelar</a>
+                                    <a href="{{ path_for('expenses.categories') }}" class="btn btn-white btn-sm" type="button">Cancelar</a>
                                     <button class="btn btn-primary btn-sm" type="submit">Salvar</button>
                                 </div>
                             </div>
